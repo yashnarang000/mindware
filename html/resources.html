@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MindWare — Resource Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f6f9ff;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #6b7280;
+        --blue-700: #1e40af;
+        --blue-600: #2563eb;
+        --cyan-400: #22d3ee;
+        --purple-500: #8b5cf6;
+        --radius: 14px;
+        --shadow-xl: 0 20px 45px rgba(30, 64, 175, 0.18);
+        --shadow-sm: 0 6px 18px rgba(2, 6, 23, 0.06);
+        --sidebar-w: 280px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text);
+        background:
+          radial-gradient(1200px 800px at 10% -10%, rgba(139, 92, 246, 0.18), transparent 60%),
+          radial-gradient(1000px 700px at 110% 10%, rgba(34, 211, 238, 0.18), transparent 60%),
+          linear-gradient(180deg, #eef4ff 0%, var(--bg) 60%);
+      }
+
+      .app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+      /* Sidebar (copied from index) */
+      .sidebar {
+        position: sticky; top: 0; height: 100vh; padding: 18px 16px; display: flex; flex-direction: column;
+        background: linear-gradient(180deg, rgba(30, 64, 175, 0.95), rgba(30, 64, 175, 0.88)) no-repeat,
+                    radial-gradient(600px 400px at 20% 0%, rgba(34, 211, 238, 0.35), transparent 60%) no-repeat,
+                    radial-gradient(500px 320px at 100% 10%, rgba(139, 92, 246, 0.35), transparent 60%) no-repeat;
+        color: #eaf1ff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.08);
+        transition: width 240ms ease, transform 240ms ease; overflow: hidden;
+      }
+      .brand { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      .brand .logo { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: conic-gradient(from 220deg at 50% 50%, var(--cyan-400), var(--purple-500), var(--blue-600)); box-shadow: 0 10px 18px rgba(34, 211, 238, 0.25), 0 6px 12px rgba(139, 92, 246, 0.2); }
+      .brand .name { font-weight: 800; letter-spacing: 0.3px; }
+      .collapse { margin-left: auto; border: none; background: transparent; color: #dbe8ff; cursor: pointer; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; transition: transform 200ms ease, background 200ms ease, box-shadow 200ms ease; }
+      .collapse:hover { background: rgba(255,255,255,0.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25); }
+      nav { margin-top: 18px; display: grid; gap: 8px; }
+      .nav-bottom { margin-top: auto; padding-top: 12px; display: grid; gap: 8px; border-top: 1px dashed rgba(255,255,255,0.18); }
+      .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: #e8eeff; text-decoration: none; transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease, color 160ms ease; }
+      .nav-item:hover { transform: translateY(-1px); background: rgba(255,255,255,0.10); box-shadow: 0 10px 18px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.18); }
+      .nav-item.active { background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(139,92,246,0.16)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28); color: #fff; }
+      .sidebar-footer { margin-top: 12px; padding: 12px 10px 8px; font-size: 12px; color: #c3d2ff; opacity: 0.9; }
+
+      /* Content */
+      .content { padding: 28px; display: grid; grid-template-rows: auto auto 1fr; gap: 22px; }
+      .panel { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-xl); border: 1px solid rgba(15, 23, 42, 0.06); }
+      .header { padding: 22px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(15, 23, 42, 0.06); background:
+        radial-gradient(800px 300px at 20% -40%, rgba(34,211,238,0.20), transparent 60%),
+        radial-gradient(600px 300px at 120% -30%, rgba(139,92,246,0.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.9));
+        border-top-left-radius: var(--radius); border-top-right-radius: var(--radius);
+      }
+      .hgroup { display: grid; gap: 6px; }
+      .title { margin: 0; font-size: 28px; letter-spacing: 0.2px; }
+      .subtitle { margin: 0; color: var(--muted); font-size: 14px; }
+      .retest-btn { border: none; padding: 10px 14px; border-radius: 999px; background: linear-gradient(135deg, var(--blue-600), var(--purple-500)); color: #fff; font-weight: 600; letter-spacing: 0.2px; cursor: pointer; box-shadow: 0 10px 18px rgba(37, 99, 235, 0.25); transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease; }
+      .retest-btn:hover { transform: translateY(-1px); filter: saturate(1.1); box-shadow: 0 14px 26px rgba(37, 99, 235, 0.32); }
+
+      /* Chips */
+      .chips { display: flex; flex-wrap: wrap; gap: 12px; padding: 16px 18px; }
+      .chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: #f0f5ff; color: #1e293b; border: 1px solid rgba(37, 99, 235, 0.18); box-shadow: var(--shadow-sm); cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease; }
+      .chip:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(15,23,42,0.08); }
+      .chip.active { background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(139,92,246,0.12)); border-color: rgba(37, 99, 235, 0.36); }
+
+      /* Cards */
+      .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; padding: 18px; }
+      .card { grid-column: span 6; background: var(--surface); border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 16px; box-shadow: var(--shadow-xl); padding: 18px; display: grid; gap: 10px; transition: transform 160ms ease, box-shadow 160ms ease; }
+      .card:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(15,23,42,0.12); }
+      .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; font-size: 12px; color: #0f172a; background: #eef4ff; border: 1px solid rgba(37,99,235,0.18); }
+      .title-md { margin: 0; font-size: 20px; }
+      .muted { color: var(--muted); margin: 0; }
+      .actions { display: flex; gap: 10px; }
+      .btn { border: none; padding: 10px 12px; border-radius: 10px; cursor: pointer; background: linear-gradient(135deg, var(--blue-600), var(--cyan-400)); color: #fff; box-shadow: 0 10px 18px rgba(37,99,235,0.25); }
+      .btn.secondary { background: #f8fbff; color: #0f172a; border: 1px solid rgba(15,23,42,0.08); box-shadow: var(--shadow-sm); }
+
+      @media (max-width: 1100px) { .card { grid-column: span 12; } }
+      @media (max-width: 980px)  { .app { grid-template-columns: 86px 1fr; } }
+      @media (max-width: 720px)  { .app { grid-template-columns: 1fr; } .sidebar { position: fixed; z-index: 20; transform: translateX(-100%); width: var(--sidebar-w); } .sidebar.open { transform: translateX(0); } .content { padding: 18px; } }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="name">MindWare</div>
+          <button class="collapse" id="collapseBtn" title="Collapse sidebar" aria-label="Collapse sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <nav>
+          <a class="nav-item" href="index.html">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L3 9V21H9V15H15V21H21V9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="item-label">AI Chatbot</span>
+          </a>
+          <a class="nav-item active" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 4H20V8H4V4ZM4 10H14V14H4V10ZM4 16H20V20H4V16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="item-label">Resource Hub</span>
+          </a>
+          <a class="nav-item" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 9H16M8 13H14M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="item-label">Peer-to-Peer</span>
+          </a>
+          <a class="nav-item" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7C16 9.20914 14.2091 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="item-label">Counselor Support</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">© 2025 MindWare</div>
+        <div class="nav-bottom" style="margin-top:auto;">
+          <a class="nav-item" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12ZM20 22C20 18.134 16.4183 15 12 15C7.58172 15 4 18.134 4 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="item-label">Profile</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section class="panel">
+          <div class="header">
+            <div class="hgroup">
+              <h1 class="title">Resource Hub</h1>
+              <p class="subtitle">Explore our curated collection of supportive resources.</p>
+            </div>
+            <button class="retest-btn" id="retestBtn">Retest</button>
+          </div>
+
+          <div class="chips" id="chips">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="video">Video</button>
+            <button class="chip" data-filter="audio">Audio</button>
+            <button class="chip" data-filter="exercise">Exercise</button>
+            <button class="chip" data-filter="activity">Activity</button>
+            <button class="chip" data-filter="visuals">Visuals</button>
+            <button class="chip" data-filter="yoga">Yoga</button>
+          </div>
+
+          <div class="cards" id="cards">
+            <article class="card" data-type="video">
+              <span class="badge">Video</span>
+              <h3 class="title-md">Mindfulness Basics</h3>
+              <p class="muted">A short video to introduce mindful breathing and present-moment awareness.</p>
+              <div class="actions"><button class="btn">Watch</button><button class="btn secondary">Save</button></div>
+            </article>
+            <article class="card" data-type="audio">
+              <span class="badge">Audio</span>
+              <h3 class="title-md">Calming Ocean Sounds</h3>
+              <p class="muted">Ten-minute ambient audio designed to reduce stress and improve focus.</p>
+              <div class="actions"><button class="btn">Listen</button><button class="btn secondary">Save</button></div>
+            </article>
+            <article class="card" data-type="exercise">
+              <span class="badge">Exercise</span>
+              <h3 class="title-md">5-4-3-2-1 Grounding</h3>
+              <p class="muted">A quick grounding technique to help you re-center during anxious moments.</p>
+              <div class="actions"><button class="btn">Start</button><button class="btn secondary">Save</button></div>
+            </article>
+            <article class="card" data-type="activity">
+              <span class="badge">Activity</span>
+              <h3 class="title-md">Gratitude Journal</h3>
+              <p class="muted">A daily activity template to reflect on positives and build resilience.</p>
+              <div class="actions"><button class="btn">Open</button><button class="btn secondary">Save</button></div>
+            </article>
+            <article class="card" data-type="visuals">
+              <span class="badge">Visuals</span>
+              <h3 class="title-md">Soothing Visual Loops</h3>
+              <p class="muted">Looping visuals crafted to calm the mind and support deep work.</p>
+              <div class="actions"><button class="btn">View</button><button class="btn secondary">Save</button></div>
+            </article>
+            <article class="card" data-type="yoga">
+              <span class="badge">Yoga</span>
+              <h3 class="title-md">Gentle Morning Flow</h3>
+              <p class="muted">A 10-minute yoga flow to release tension and energize your day.</p>
+              <div class="actions"><button class="btn">Begin</button><button class="btn secondary">Save</button></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const sidebar = document.getElementById('sidebar');
+      const collapseBtn = document.getElementById('collapseBtn');
+      collapseBtn.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
+
+      const retestBtn = document.getElementById('retestBtn');
+      retestBtn.addEventListener('click', () => alert('Retest started.'));
+
+      // Filtering
+      const chips = document.getElementById('chips');
+      const cards = Array.from(document.querySelectorAll('.card'));
+      chips.addEventListener('click', (e) => {
+        const btn = e.target.closest('.chip');
+        if (!btn) return;
+        chips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const match = filter === 'all' || card.dataset.type === filter;
+          card.style.display = match ? 'grid' : 'none';
+        });
+      });
+    </script>
+  </body>
+</html>
+
+
