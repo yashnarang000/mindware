@@ -12,5 +12,4 @@
 
         - Peer-to-peer chat system has smoothly been connected to an online database
 
-
         - The assessment thing is not saving its data in the mongodb atlas. Let's see about that.
