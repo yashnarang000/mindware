@@ -1,3 +1,5 @@
 mindware/chat_backend/venv/
 mindware/chat_backend/__pycache__/
 mindware/backend/.env
+mindware/chat_backend/.env
+

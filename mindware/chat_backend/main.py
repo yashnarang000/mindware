@@ -3,7 +3,7 @@ import json
 import random
 from typing import Dict, Set
 from datetime import datetime
-
+from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -12,8 +12,12 @@ from decouple import config
 # --- App & Database Setup ---
 app = FastAPI()
 
+# Loading the environment file
+load_dotenv()
+mongodb_link = os.getenv("MONGO_URI")
+
 # MongoDB connection
-MONGO_DETAILS = config("MONGO_DETAILS", default="mongodb://localhost:27017")
+MONGO_DETAILS = config("MONGO_DETAILS", default=mongodb_link)
 client = AsyncIOMotorClient(MONGO_DETAILS)
 db = client.peer_to_peer_app
 messages_collection = db.get_collection("messages")
